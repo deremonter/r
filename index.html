@@ -8,7 +8,6 @@
 <meta property="og:image" content="https://deremonter.github.io/путь/к/trayicon.png">
 <meta property="og:type" content="website">
 <meta name="twitter:card" content="summary_large_image">
-<meta http-equiv="refresh" content="0; url=https://tray-vpn.com">
 <link rel="icon" type="image/png" href="trayicon.png">
 <title>Tray VPN</title>
 
@@ -130,9 +129,20 @@
     }
 </style>
 
-<meta http-equiv="refresh" content="0; url=https://tray-vpn.com">
 <script type="text/javascript">
-    window.location.replace("https://tray-vpn.com");
+    // Берем параметры из текущего URL (например, ?post=123)
+    let params = window.location.search;
+    
+    // Пытаемся получить URL страницы, откуда пришел юзер
+    let referrer = document.referrer;
+    if (referrer) {
+        // Добавляем реферер к параметрам
+        let refParam = 'ref=' + encodeURIComponent(referrer);
+        params = params ? params + '&' + refParam : '?' + refParam;
+    }
+
+    // Делаем редирект, передавая все собранные данные на твой основной сайт
+    window.location.replace("https://tray-vpn.com" + params);
 </script>
 </head>
 <body>
