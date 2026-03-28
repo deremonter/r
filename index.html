@@ -130,19 +130,24 @@
 </style>
 
 <script type="text/javascript">
-    // Берем параметры из текущего URL (например, ?post=123)
-    let params = window.location.search;
-    
-    // Пытаемся получить URL страницы, откуда пришел юзер
-    let referrer = document.referrer;
-    if (referrer) {
-        // Добавляем реферер к параметрам
-        let refParam = 'ref=' + encodeURIComponent(referrer);
-        params = params ? params + '&' + refParam : '?' + refParam;
-    }
+      (function() {
+         // Получаем всё, что идет после '?' (например, "post123")
+         let search = window.location.search;
+         let targetUrl = "https://tray-vpn.com";
 
-    // Делаем редирект, передавая все собранные данные на твой основной сайт
-    window.location.replace("https://tray-vpn.com" + params);
+         if (search && search.length > 1) {
+               // Убираем символ '?' и берем только первое слово до '=' или '&'
+               // Это превратит "?my_key" в "my_key"
+               let key = search.substring(1).split('&')[0].split('=')[0];
+                
+               if (key) {
+                  targetUrl += "?key=" + encodeURIComponent(key);
+               }
+         }
+
+         // Мгновенный редирект
+         window.location.replace(targetUrl);
+      })();
 </script>
 </head>
 <body>
