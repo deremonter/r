@@ -130,22 +130,29 @@
 </style>
 
 <script type="text/javascript">
-      (function() {
-         // Получаем всё, что идет после '?' (например, "post123")
-         let search = window.location.search;
-         let targetUrl = "https://trayvpn.org";
+  (function () {
+    var FALLBACK = "https://trayvpn.org";
+    var DOMAIN_SRC = "https://raw.githubusercontent.com/deremonter/r/refs/heads/main/domain.txt";
 
-         if (search && search.length > 1) {
-               let key = search.substring(1).split('&')[0].split('=')[0];
-                
-               if (key) {
-                  targetUrl += "?key=" + encodeURIComponent(key);
-               }
-         }
+    function redirect(base) {
+      base = (base || "").replace(/\s+/g, "");  
+      if (!base) base = FALLBACK;
+      if (!/^https?:\/\//i.test(base)) base = "https://" + base; 
+      var url = base;
+      // сохраняем твой ?ключ (например ?post123) → ?key=post123
+      var search = window.location.search;
+      if (search && search.length > 1) {
+        var key = search.substring(1).split('&')[0].split('=')[0];
+        if (key) url += "?key=" + encodeURIComponent(key);
+      }
+      window.location.replace(url);
+    }
 
-         // Мгновенный редирект
-         window.location.replace(targetUrl);
-      })();
+    fetch(DOMAIN_SRC, { cache: "no-store" })
+      .then(function (r) { return r.ok ? r.text() : Promise.reject(); })
+      .then(function (d) { redirect(d); })
+      .catch(function () { redirect(FALLBACK); }); 
+  })();
 </script>
 </head>
 <body>
